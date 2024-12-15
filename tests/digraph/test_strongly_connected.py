@@ -87,6 +87,7 @@ class TestCondensation(unittest.TestCase):
         self.graph.add_edge(self.node_d, self.node_a, "d->a")  # サイクル: a -> b -> c -> d -> a
 
         self.graph.add_edge(self.node_b, self.node_e, "b->e")
+
         self.graph.add_edge(self.node_e, self.node_f, "e->f")
         self.graph.add_edge(self.node_f, self.node_g, "f->g")
         self.graph.add_edge(self.node_g, self.node_h, "g->h")
@@ -97,11 +98,13 @@ class TestCondensation(unittest.TestCase):
         condensed_graph = rustworkx.condensation(self.graph)
 
         # ノード数を確認（2つのサイクルが1つずつのノードに縮約される）
-        self.assertEqual(condensed_graph.node_count(), 2)  # [SCC(a, b, c, d), SCC(e, f, g, h)]
+        self.assertEqual(
+            len(condensed_graph.node_indices()), 2
+        )  # [SCC(a, b, c, d), SCC(e, f, g, h)]
 
         # エッジ数を確認
         self.assertEqual(
-            condensed_graph.edge_count(), 1
+            len(condensed_graph.edge_indices()), 1
         )  # Edge: [SCC(a, b, c, d)] -> [SCC(e, f, g, h)]
 
         # 縮約されたノードの内容を確認
@@ -112,7 +115,5 @@ class TestCondensation(unittest.TestCase):
         self.assertTrue(set(scc1) == {"e", "f", "g", "h"} or set(scc2) == {"e", "f", "g", "h"})
 
         # エッジの内容を確認
-        edges = list(condensed_graph.edges())
-        self.assertEqual(len(edges), 1)
-        source, target, weight = edges[0]
+        source, target, weight = *condensed_graph.edge_list()[0], condensed_graph.edges()[0]
         self.assertIn("b->e", weight)  # 縮約後のグラフにおいて、正しいエッジが残っていることを確認
