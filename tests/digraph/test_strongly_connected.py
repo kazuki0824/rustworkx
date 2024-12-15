@@ -66,6 +66,7 @@ class TestStronglyConnected(unittest.TestCase):
             G.add_child(node, str(i), {})
         self.assertEqual(len(rustworkx.strongly_connected_components(G)), 200000)
 
+
 class TestCondensation(unittest.TestCase):
     def setUp(self):
         # グラフをセットアップ
@@ -99,7 +100,9 @@ class TestCondensation(unittest.TestCase):
         self.assertEqual(condensed_graph.node_count(), 2)  # [SCC(a, b, c, d), SCC(e, f, g, h)]
 
         # エッジ数を確認
-        self.assertEqual(condensed_graph.edge_count(), 1)  # Edge: [SCC(a, b, c, d)] -> [SCC(e, f, g, h)]
+        self.assertEqual(
+            condensed_graph.edge_count(), 1
+        )  # Edge: [SCC(a, b, c, d)] -> [SCC(e, f, g, h)]
 
         # 縮約されたノードの内容を確認
         nodes = list(condensed_graph.nodes())
