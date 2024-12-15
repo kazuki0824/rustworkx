@@ -115,5 +115,5 @@ class TestCondensation(unittest.TestCase):
         self.assertTrue(set(scc1) == {"e", "f", "g", "h"} or set(scc2) == {"e", "f", "g", "h"})
 
         # エッジの内容を確認
-        source, target, weight = *condensed_graph.edge_list()[0], condensed_graph.edges()[0]
+        weight = condensed_graph.edges()[0]
         self.assertIn("b->e", weight)  # 縮約後のグラフにおいて、正しいエッジが残っていることを確認
