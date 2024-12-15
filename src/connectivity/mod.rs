@@ -34,7 +34,6 @@ use rayon::prelude::*;
 
 use ndarray::prelude::*;
 use numpy::IntoPyArray;
-use petgraph::algo::kosaraju_scc;
 use petgraph::prelude::StableGraph;
 
 use crate::iterators::{
@@ -133,7 +132,7 @@ where
             .map(|row| row.iter().map(|x| NodeIndex::new(*x)).collect())
             .collect()
     } else {
-        kosaraju_scc(&g)
+        algo::kosaraju_scc(&g)
     };
 
     let mut condensed: StableGraph<Vec<N>, E, Ty, Ix> =
